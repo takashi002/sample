@@ -1,18 +1,10 @@
-# My Website
+# Sample Projects
 
-シンプルなWebサイトのテンプレートです。
+Claudeと一緒に作ったWebアプリ・サイトのコレクション。
 
-## ファイル構成
+## Projects
 
-```
-new-website/
-├── index.html   # メインページ
-├── style.css    # スタイルシート
-└── README.md    # このファイル
-```
-
-## カスタマイズ方法
-
-1. `index.html` を編集してコンテンツを変更
-2. `style.css` を編集してデザインを変更
-3. 必要に応じてセクションを追加・削除
+| プロジェクト | 説明 |
+|---|---|
+| [my-website](projects/my-website/) | シンプルなポートフォリオサイト |
+| [oura-health-dashboard](projects/oura-health-dashboard/) | Oura Ringの健康データ可視化ダッシュボード |
