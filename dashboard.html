@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oura Health Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <!-- API Token Setup Modal -->
+  <div id="token-modal" class="modal">
+    <div class="modal-content">
+      <h2>Oura API 設定</h2>
+      <p>Oura Cloudの<a href="https://cloud.ouraring.com/personal-access-tokens" target="_blank" rel="noopener">Personal Access Tokens</a>ページからトークンを取得してください。</p>
+      <input type="password" id="token-input" placeholder="Oura Personal Access Token">
+      <button id="token-submit" class="btn-primary">接続する</button>
+      <p id="token-error" class="error-text"></p>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="app" class="hidden">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <h1>Oura Health Dashboard</h1>
+      </div>
+      <div class="header-right">
+        <select id="date-range">
+          <option value="7">過去7日間</option>
+          <option value="14">過去14日間</option>
+          <option value="30" selected>過去30日間</option>
+        </select>
+        <button id="refresh-btn" class="btn-icon" title="更新">&#x21bb;</button>
+        <button id="logout-btn" class="btn-icon" title="ログアウト">&#x2715;</button>
+      </div>
+    </header>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p>データを読み込み中...</p>
+    </div>
+
+    <!-- Score Cards -->
+    <section class="score-cards">
+      <div class="score-card readiness">
+        <div class="score-ring" id="readiness-ring">
+          <svg viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+            <circle class="ring-fill" cx="60" cy="60" r="52" id="readiness-circle"/>
+          </svg>
+          <span class="score-value" id="readiness-score">--</span>
+        </div>
+        <div class="score-label">レディネス</div>
+        <div class="score-sub" id="readiness-sub"></div>
+      </div>
+      <div class="score-card sleep">
+        <div class="score-ring" id="sleep-ring">
+          <svg viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+            <circle class="ring-fill" cx="60" cy="60" r="52" id="sleep-circle"/>
+          </svg>
+          <span class="score-value" id="sleep-score">--</span>
+        </div>
+        <div class="score-label">睡眠スコア</div>
+        <div class="score-sub" id="sleep-sub"></div>
+      </div>
+      <div class="score-card activity">
+        <div class="score-ring" id="activity-ring">
+          <svg viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+            <circle class="ring-fill" cx="60" cy="60" r="52" id="activity-circle"/>
+          </svg>
+          <span class="score-value" id="activity-score">--</span>
+        </div>
+        <div class="score-label">アクティビティ</div>
+        <div class="score-sub" id="activity-sub"></div>
+      </div>
+    </section>
+
+    <!-- Detail Cards -->
+    <section class="detail-grid">
+      <!-- Sleep Details -->
+      <div class="detail-card">
+        <h3>睡眠時間の推移</h3>
+        <div class="chart-container">
+          <canvas id="sleep-duration-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Sleep Stages -->
+      <div class="detail-card">
+        <h3>睡眠ステージ (直近)</h3>
+        <div class="chart-container">
+          <canvas id="sleep-stages-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Readiness Trend -->
+      <div class="detail-card">
+        <h3>レディネススコアの推移</h3>
+        <div class="chart-container">
+          <canvas id="readiness-trend-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="detail-card">
+        <h3>アクティビティの推移</h3>
+        <div class="chart-container">
+          <canvas id="activity-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Heart Rate -->
+      <div class="detail-card">
+        <h3>安静時心拍数</h3>
+        <div class="chart-container">
+          <canvas id="hr-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- HRV -->
+      <div class="detail-card">
+        <h3>心拍変動 (HRV)</h3>
+        <div class="chart-container">
+          <canvas id="hrv-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Body Temperature -->
+      <div class="detail-card">
+        <h3>体温偏差</h3>
+        <div class="chart-container">
+          <canvas id="temp-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Activity Breakdown -->
+      <div class="detail-card">
+        <h3>活動内訳 (直近)</h3>
+        <div class="chart-container">
+          <canvas id="activity-breakdown-chart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <footer class="dashboard-footer">
+      <p>Data provided by <a href="https://ouraring.com" target="_blank" rel="noopener">Oura</a> API v2</p>
+    </footer>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
